@@ -1,6 +1,7 @@
 package pers.liuhan.toolkit.forms;
 
 
+import pers.liuhan.toolkit.component.OutTextForm;
 import pers.liuhan.toolkit.util.ComponentUtil;
 
 import javax.swing.*;
@@ -134,7 +135,7 @@ public class ParamBuilderForm extends BaseForm {
         resultBtn = new JButton("生成sql");
         resultBtn.addActionListener(e -> {
             genSqlContext();
-            new TextForm(sqlContext.toString()).showModel();
+            new OutTextForm(sqlContext.toString()).showModel();
         });
         List<Component> comps = new ArrayList<>();
         comps.add(resultBtn);

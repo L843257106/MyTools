@@ -1,5 +1,7 @@
-package pers.liuhan.toolkit.forms;
+package pers.liuhan.toolkit.component;
 
+
+import pers.liuhan.toolkit.forms.BaseForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,12 +9,12 @@ import java.awt.*;
 /**
  * @author liuhan19691
  */
-public class TextForm extends BaseForm {
+public class OutTextForm extends BaseForm {
 
     private final int WIDTH_PERCENT = 75;
     private final int HEIGHT_PERCENT = 50;
 
-    public TextForm(String text) {
+    public OutTextForm(String text) {
         super();
         resetFormSize(WIDTH_PERCENT, HEIGHT_PERCENT);
         setFrameToScreenCenter();
