@@ -27,7 +27,6 @@ public class BaseForm extends JFrame {
     }
 
     public void showModel(){
-        setAlwaysOnTop(true);
         showForm();
     }
 

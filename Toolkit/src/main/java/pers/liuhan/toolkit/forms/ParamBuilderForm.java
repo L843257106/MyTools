@@ -27,11 +27,17 @@ public class ParamBuilderForm extends BaseForm {
     private JLabel newCodeLbl = new JLabel("新系统参数代码:");
     private JTextField newCodeText = new JTextField();
 
+    private JLabel visiableLbl = new JLabel("参数是否可见:");
+    private JComboBox<CbxItem> visiableCbx = new JComboBox<>();
+
     private JLabel readOnlyLbl = new JLabel("参数是否只读:");
     private JComboBox<CbxItem> readOnluCbx = new JComboBox<>();
 
     private JLabel compTypeLbl = new JLabel("组件类型:");
     private JComboBox<CbxItem> compTypeCbx = new JComboBox<>();
+
+    private JLabel groupIdLbl = new JLabel("系统参数所属组代码:");
+    private JTextField groupIdText = new JTextField();
 
     private JLabel groupNameLbl = new JLabel("系统参数所属组名称:");
     private JTextField groupNameText = new JTextField();
@@ -47,6 +53,9 @@ public class ParamBuilderForm extends BaseForm {
 
     private JLabel sysValueLbl = new JLabel("参数值:");
     private JTextField sysValueText = new JTextField();
+
+    private JLabel defaultSysValueLbl = new JLabel("参数默认值:");
+    private JTextField defaultSysValueText = new JTextField();
 
     private JLabel orderLbl = new JLabel("排序值:");
     private JTextField orderText = new JTextField();
@@ -64,12 +73,15 @@ public class ParamBuilderForm extends BaseForm {
         genMainPanel();
         genOldParamInfo();
         genNewParamInfo();
+        genVisiableInfo();
         genReadOnlyInfo();
         genCompTypeInfo();
+        genGroupIdInfo();
         genGroupNameInfo();
         genSysTypeInfo();
         genDictItemsInfo();
         genSysValueInfo();
+        genDefaultSysValueInfo();
         genOrderInfo();
 
         genResultButton();
@@ -101,6 +113,15 @@ public class ParamBuilderForm extends BaseForm {
         components.add(comps);
     }
 
+    private void genVisiableInfo() {
+        visiableCbx.addItem(new CbxItem("0", "否"));
+        visiableCbx.addItem(new CbxItem("1", "是"));
+        List<Component> comps = new ArrayList<>();
+        comps.add(visiableLbl);
+        comps.add(visiableCbx);
+        components.add(comps);
+    }
+
     private void genReadOnlyInfo() {
         readOnluCbx.addItem(new CbxItem("0", "否"));
         readOnluCbx.addItem(new CbxItem("1", "是"));
@@ -120,6 +141,13 @@ public class ParamBuilderForm extends BaseForm {
         components.add(comps);
     }
 
+    private void genGroupIdInfo() {
+        List<Component> comps = new ArrayList<>();
+        comps.add(groupIdLbl);
+        comps.add(groupIdText);
+        components.add(comps);
+    }
+
     private void genGroupNameInfo() {
         List<Component> comps = new ArrayList<>();
         comps.add(groupNameLbl);
@@ -128,8 +156,8 @@ public class ParamBuilderForm extends BaseForm {
     }
 
     private void genSysTypeInfo() {
-        dictItemCbx.addItem(new CbxItem("4", "ETF系统"));
-        dictItemCbx.addItem(new CbxItem("6", "分TA系统"));
+        sysTypeCbx.addItem(new CbxItem("4", "ETF系统"));
+        sysTypeCbx.addItem(new CbxItem("6", "分TA系统"));
 
         List<Component> comps = new ArrayList<>();
         comps.add(sysTypeLbl);
@@ -168,6 +196,13 @@ public class ParamBuilderForm extends BaseForm {
         components.add(comps);
     }
 
+    private void genDefaultSysValueInfo() {
+        List<Component> comps = new ArrayList<>();
+        comps.add(defaultSysValueLbl);
+        comps.add(defaultSysValueText);
+        components.add(comps);
+    }
+
     private void genSysValueInfo() {
         List<Component> comps = new ArrayList<>();
         comps.add(sysValueLbl);
@@ -201,19 +236,47 @@ public class ParamBuilderForm extends BaseForm {
         String oldName = oldNameText.getText();
         String newParam = newCodeText.getText();
         String sysType = ((CbxItem) sysTypeCbx.getSelectedItem()).getKey();
-        String itemsCode;
+        String itemsKeyCode = "000000" + "_" + sysType + "_" + oldParam;
+
+        String visible = ((CbxItem) visiableCbx.getSelectedItem()).getKey();
         String readOnly = ((CbxItem) readOnluCbx.getSelectedItem()).getKey();
         String compType = ((CbxItem) compTypeCbx.getSelectedItem()).getKey();
+        String groupId = groupIdText.getText();
         String groupName = groupNameText.getText();
         String sysValue = sysValueText.getText();
+        String defaultValue = defaultSysValueText.getText();
+        String order = orderText.getText();
+
+
+        sqlContext.append("-- ").append(oldName).append("(").append(oldParam).append(")").append(lineEnd);
 
         sqlContext.append("--delete from tbparam where param_id = '").append(oldParam).append("' ");
         sqlContext.append("and belong_type = '").append(sysType).append("';").append(lineEnd);
 
-        sqlContext.append("-- ").append(oldName).append("(").append(oldParam).append(")").append(lineEnd);
         sqlContext.append(insertTbparamSql).append(lineEnd);
         sqlContext.append("values ('000000', '").append(newParam).append("', '").append(oldName).append("', '").append(sysValue);
-        sqlContext.append("', ' ', '4', '1', ' ');").append(lineEnd);
+        sqlContext.append("', ' ', '").append(sysType).append("', '1', ' ');").append(lineEnd);
 
+        sqlContext.append("").append(lineEnd);
+        sqlContext.append("--delete from tbparamelement where param_id = '").append(oldParam).append("' ");
+        sqlContext.append("and belong_type = '").append(sysType).append("';").append(lineEnd);
+
+
+        sqlContext.append("insert into tbparamelement(belong_type, ta_code, param_id, param_name, element_id, component_kind, group_id, group_name, order_no, data_default, prompt, split_str, visable, readonly_flag, line_flag, on_change) ").append(lineEnd);
+        sqlContext.append("values ('").append(sysType).append("', '000000', '").append(newParam).append("', '").append(oldName).append("', '");
+        sqlContext.append(itemsKeyCode).append("', '").append(compType).append("', ").append(groupId).append(", '");
+        sqlContext.append(groupName).append("', ").append(order).append(", '").append(defaultValue).append("', '");
+        sqlContext.append(oldName).append("', ' ', '").append(visible).append("', '").append(readOnly).append("', '0', ' ');").append(lineEnd);
+
+        sqlContext.append("").append(lineEnd);
+        sqlContext.append("--delete from tbparamelementdata where element_id = '").append(itemsKeyCode).append("';").append(lineEnd);
+
+        int totalCount = sysItemCbx.getItemCount();
+        for (int i = 0; i < totalCount; i++) {
+            CbxItem item = sysItemCbx.getItemAt(i);
+            sqlContext.append("insert into tbparamelementdata(element_id, order_no, param_value, value_name, dict_key, visable, readonly_flag, check_format, data_width)").append(lineEnd);
+            sqlContext.append("values ('").append(itemsKeyCode).append("', ").append(i).append(", '").append(item.getKey()).append("', '");
+            sqlContext.append(item.getValue()).append("', ' ', '1', '0', ' ', 0);").append(lineEnd);
+        }
     }
 }
