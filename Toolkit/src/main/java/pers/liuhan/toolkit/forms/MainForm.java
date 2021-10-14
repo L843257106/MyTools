@@ -6,8 +6,6 @@ import pers.liuhan.toolkit.interfaces.IMainFunction;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Map;
 
 /**
@@ -17,9 +15,9 @@ public class MainForm extends BaseForm {
 
     public MainForm() {
         super();
-        setTitle("Liuhan`s Tool");
+        setTitle("Marish`s Tool");
         setJMenuBar(genMenuBar());
-        setFreeFormWhenClose();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private JMenuBar genMenuBar() {
@@ -48,45 +46,4 @@ public class MainForm extends BaseForm {
         }
         return menu;
     }
-
-    private void setFreeFormWhenClose() {
-        addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-
-            }
-        });
-    }
-
-
 }

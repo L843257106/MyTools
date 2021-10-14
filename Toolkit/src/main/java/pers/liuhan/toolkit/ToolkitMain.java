@@ -11,5 +11,4 @@ public class ToolkitMain {
     public static void main(String[] args) {
         new MainForm().showForm();
     }
-
 }

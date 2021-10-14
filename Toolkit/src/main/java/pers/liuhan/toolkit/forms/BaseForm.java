@@ -7,15 +7,18 @@ import java.awt.*;
 /**
  * @author liuhan19691
  */
-public class BaseForm extends JDialog {
+public class BaseForm extends JFrame {
 
     public static final int MAX_WIDTH_PERCENT = 100;
     public static final int MAX_HEIGHT_PERCENT = 100;
 
+    private int factWidth;
+    private int factHeight;
+
     public BaseForm() {
         setDefaultFrameSize();
         setFrameToScreenCenter();
-        setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setResizable(false);
     }
 
@@ -24,7 +27,6 @@ public class BaseForm extends JDialog {
     }
 
     public void showModel(){
-        setModal(true);
         setAlwaysOnTop(true);
         showForm();
     }
@@ -45,13 +47,29 @@ public class BaseForm extends JDialog {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width / 2;
         int height = screenSize.height / 2;
-        setSize(width, height);
+        this.setSize(width, height);
     }
 
     public void resetFrameSize(int widthPercent, int heightPercent) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width / MAX_WIDTH_PERCENT * widthPercent;
         int height = screenSize.height / MAX_HEIGHT_PERCENT * heightPercent;
-        setSize(width, height);
+        this.setSize(width, height);
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        this.factWidth = width;
+        this.factHeight = height;
+        super.setSize(width, height);
+    }
+
+
+    public int getFactWidth() {
+        return factWidth;
+    }
+
+    public int getFactHeight() {
+        return factHeight;
     }
 }
