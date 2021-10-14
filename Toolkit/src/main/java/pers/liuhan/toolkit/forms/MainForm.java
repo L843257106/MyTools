@@ -31,15 +31,15 @@ public class MainForm extends BaseForm {
     }
 
     private JMenu genMainFuncMenu() {
-        JMenu menu = new JMenu("Main Functions");
-        menu.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        JMenu menu = new JMenu("主 要 功 能");
+        menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         Map<String, IMainFunction> functionMap = FunctionFactory.getBeansMap();
         for (Map.Entry<String, IMainFunction> functionEntry : functionMap.entrySet()) {
-            IMainFunction function = functionEntry.getValue();
-            JMenuItem menuItem = new JMenuItem(functionEntry.getKey());
+            IMainFunction iMainFunction = functionEntry.getValue();
+            JMenuItem menuItem = new JMenuItem(iMainFunction.getFunctionName());
             menuItem.addActionListener(e -> {
-                BaseForm form = function.getFunctionForm();
-                form.setTitle(functionEntry.getKey());
+                BaseForm form = iMainFunction.getFunctionForm();
+                form.setTitle(iMainFunction.getFunctionName());
                 form.showModel();
             });
             menu.add(menuItem);

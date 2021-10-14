@@ -1,12 +1,16 @@
 package pers.liuhan.toolkit.forms;
 
 
+import pers.liuhan.toolkit.component.CbxItem;
+import pers.liuhan.toolkit.component.InputTextForm;
 import pers.liuhan.toolkit.component.OutTextForm;
 import pers.liuhan.toolkit.util.ComponentUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,28 +19,37 @@ import java.util.List;
 public class ParamBuilderForm extends BaseForm {
     private JPanel mainPnl;
 
-    private JLabel oldCodeLbl = new JLabel("2.0系统参数代码:");
+    private JLabel oldCodeLbl = new JLabel("老系统参数代码:");
     private JTextField oldCodeText = new JTextField();
-    private JLabel oldNameLbl = new JLabel("2.0系统参数名称:", SwingConstants.RIGHT);
+    private JLabel oldNameLbl = new JLabel("老系统参数名称:", SwingConstants.RIGHT);
     private JTextField oldNameText = new JTextField();
 
-    private JLabel newCodeLbl = new JLabel("6.0系统参数代码:");
-    private JTextField newNameText = new JTextField();
+    private JLabel newCodeLbl = new JLabel("新系统参数代码:");
+    private JTextField newCodeText = new JTextField();
 
-    private JLabel readOnluLbl = new JLabel("参数是否只读:");
-    private JComboBox<String> readOnluCbx = new JComboBox<>();
-
-    private JLabel sysTypeLbl = new JLabel("系统类型:");
-    private JComboBox<String> sysTypeCbx = new JComboBox<>();
+    private JLabel readOnlyLbl = new JLabel("参数是否只读:");
+    private JComboBox<CbxItem> readOnluCbx = new JComboBox<>();
 
     private JLabel compTypeLbl = new JLabel("组件类型:");
-    private JComboBox<String> compTypeCbx = new JComboBox<>();
+    private JComboBox<CbxItem> compTypeCbx = new JComboBox<>();
 
     private JLabel groupNameLbl = new JLabel("系统参数所属组名称:");
     private JTextField groupNameText = new JTextField();
 
+    private JLabel sysTypeLbl = new JLabel("系统类型:");
+    private JComboBox<CbxItem> sysTypeCbx = new JComboBox<>();
+
     private JLabel dictItemsLbl = new JLabel("数据字典类型:");
-    private JComboBox<String> dictItemCbx = new JComboBox<>();
+    private JComboBox<CbxItem> dictItemCbx = new JComboBox<>();
+
+    private JLabel sysItemsLbl = new JLabel("系统参数项:");
+    private JComboBox<CbxItem> sysItemCbx = new JComboBox<>();
+
+    private JLabel sysValueLbl = new JLabel("参数值:");
+    private JTextField sysValueText = new JTextField();
+
+    private JLabel orderLbl = new JLabel("排序值:");
+    private JTextField orderText = new JTextField();
 
     private JButton resultBtn;
 
@@ -52,10 +65,12 @@ public class ParamBuilderForm extends BaseForm {
         genOldParamInfo();
         genNewParamInfo();
         genReadOnlyInfo();
-        genSysTypeInfo();
         genCompTypeInfo();
         genGroupNameInfo();
+        genSysTypeInfo();
         genDictItemsInfo();
+        genSysValueInfo();
+        genOrderInfo();
 
         genResultButton();
         ComponentUtil.paintPanel(this, mainPnl, components);
@@ -82,32 +97,23 @@ public class ParamBuilderForm extends BaseForm {
     private void genNewParamInfo() {
         List<Component> comps = new ArrayList<>();
         comps.add(newCodeLbl);
-        comps.add(newNameText);
+        comps.add(newCodeText);
         components.add(comps);
     }
 
     private void genReadOnlyInfo() {
-        readOnluCbx.addItem("0:否");
-        readOnluCbx.addItem("1:是");
+        readOnluCbx.addItem(new CbxItem("0", "否"));
+        readOnluCbx.addItem(new CbxItem("1", "是"));
         List<Component> comps = new ArrayList<>();
-        comps.add(readOnluLbl);
+        comps.add(readOnlyLbl);
         comps.add(readOnluCbx);
         components.add(comps);
     }
 
-    private void genSysTypeInfo() {
-        sysTypeCbx.addItem("etf:ETF系统");
-        sysTypeCbx.addItem("sub:分TA系统");
-        List<Component> comps = new ArrayList<>();
-        comps.add(sysTypeLbl);
-        comps.add(sysTypeCbx);
-        components.add(comps);
-    }
-
     private void genCompTypeInfo() {
-        compTypeCbx.addItem("1:文本输入框");
-        compTypeCbx.addItem("Y:ratio按钮");
-        compTypeCbx.addItem("A:下拉框");
+        compTypeCbx.addItem(new CbxItem("1", "文本输入框"));
+        compTypeCbx.addItem(new CbxItem("Y", "ratio按钮"));
+        compTypeCbx.addItem(new CbxItem("A", "下拉框"));
         List<Component> comps = new ArrayList<>();
         comps.add(compTypeLbl);
         comps.add(compTypeCbx);
@@ -121,13 +127,58 @@ public class ParamBuilderForm extends BaseForm {
         components.add(comps);
     }
 
+    private void genSysTypeInfo() {
+        dictItemCbx.addItem(new CbxItem("4", "ETF系统"));
+        dictItemCbx.addItem(new CbxItem("6", "分TA系统"));
+
+        List<Component> comps = new ArrayList<>();
+        comps.add(sysTypeLbl);
+        comps.add(sysTypeCbx);
+        components.add(comps);
+    }
+
     private void genDictItemsInfo() {
-        dictItemCbx.addItem("0:是/否");
-        dictItemCbx.addItem("1:开通/不开通");
-        dictItemCbx.addItem("Z:自定义");
+        dictItemCbx.addItem(new CbxItem("0", "0:否/1:是"));
+        dictItemCbx.addItem(new CbxItem("1", "0:不开通/1:开通"));
+        dictItemCbx.addItem(new CbxItem("Z", "自定义"));
+
+        dictItemCbx.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                CbxItem item = (CbxItem) e.getItem();
+                sysItemCbx.removeAllItems();
+                if ("Z".equals(item.getKey())) {
+                    InputTextForm textForm = new InputTextForm(InputTextForm.FILL_CBX);
+                    textForm.setTextBoot(sysItemCbx);
+                    textForm.showModel();
+                } else {
+                    List<String> items = Arrays.asList(item.getValue().split("/"));
+                    for (String value : items) {
+                        CbxItem tmpItem = new CbxItem(value);
+                        sysItemCbx.addItem(tmpItem);
+                    }
+                }
+            }
+        });
+
         List<Component> comps = new ArrayList<>();
         comps.add(dictItemsLbl);
         comps.add(dictItemCbx);
+        comps.add(sysItemsLbl);
+        comps.add(sysItemCbx);
+        components.add(comps);
+    }
+
+    private void genSysValueInfo() {
+        List<Component> comps = new ArrayList<>();
+        comps.add(sysValueLbl);
+        comps.add(sysValueText);
+        components.add(comps);
+    }
+
+    private void genOrderInfo() {
+        List<Component> comps = new ArrayList<>();
+        comps.add(orderLbl);
+        comps.add(orderText);
         components.add(comps);
     }
 
@@ -143,6 +194,26 @@ public class ParamBuilderForm extends BaseForm {
     }
 
     private void genSqlContext() {
+        String lineEnd = "\n";
         sqlContext.setLength(0);
+        String insertTbparamSql = "insert into tbparam (ta_code, param_id, param_name, param_value, value_name, belong_type, modi_flag, reserve1)";
+        String oldParam = oldCodeText.getText();
+        String oldName = oldNameText.getText();
+        String newParam = newCodeText.getText();
+        String sysType = ((CbxItem) sysTypeCbx.getSelectedItem()).getKey();
+        String itemsCode;
+        String readOnly = ((CbxItem) readOnluCbx.getSelectedItem()).getKey();
+        String compType = ((CbxItem) compTypeCbx.getSelectedItem()).getKey();
+        String groupName = groupNameText.getText();
+        String sysValue = sysValueText.getText();
+
+        sqlContext.append("--delete from tbparam where param_id = '").append(oldParam).append("' ");
+        sqlContext.append("and belong_type = '").append(sysType).append("';").append(lineEnd);
+
+        sqlContext.append("-- ").append(oldName).append("(").append(oldParam).append(")").append(lineEnd);
+        sqlContext.append(insertTbparamSql).append(lineEnd);
+        sqlContext.append("values ('000000', '").append(newParam).append("', '").append(oldName).append("', '").append(sysValue);
+        sqlContext.append("', ' ', '4', '1', ' ');").append(lineEnd);
+
     }
 }

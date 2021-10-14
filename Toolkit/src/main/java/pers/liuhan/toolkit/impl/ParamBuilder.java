@@ -13,8 +13,8 @@ import pers.liuhan.toolkit.interfaces.IMainFunction;
 public class ParamBuilder implements IMainFunction {
 
     @Override
-    public void showFunctionForm() {
-
+    public String getFunctionName() {
+        return "6.0系统参数生成器";
     }
 
     @Override

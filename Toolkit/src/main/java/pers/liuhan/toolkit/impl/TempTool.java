@@ -1,6 +1,8 @@
 package pers.liuhan.toolkit.impl;
 
 import org.springframework.stereotype.Service;
+import pers.liuhan.toolkit.component.BaseTextForm;
+import pers.liuhan.toolkit.component.InputTextForm;
 import pers.liuhan.toolkit.forms.BaseForm;
 import pers.liuhan.toolkit.interfaces.IMainFunction;
 
@@ -12,13 +14,14 @@ import pers.liuhan.toolkit.interfaces.IMainFunction;
 public class TempTool implements IMainFunction {
 
     @Override
-    public void showFunctionForm() {
-
+    public String getFunctionName() {
+        return "临时功能";
     }
 
     @Override
     public BaseForm getFunctionForm() {
-        return new BaseForm();
+        BaseTextForm inForm = new InputTextForm(0);
+        return inForm;
     }
 
 }

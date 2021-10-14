@@ -7,10 +7,13 @@ import pers.liuhan.toolkit.forms.BaseForm;
  */
 public interface IMainFunction {
 
+
     /**
-     * 显示功能窗口
+     * 获取功能名称
+     *
+     * @return
      */
-    void showFunctionForm();
+    String getFunctionName();
 
     /**
      * 获取具体功能的窗口
