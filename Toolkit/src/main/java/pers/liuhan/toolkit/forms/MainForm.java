@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author liuhan19691
@@ -24,36 +23,33 @@ public class MainForm extends BaseForm {
     }
 
     private JMenuBar genMenuBar() {
+        JMenu menu = genMainFuncMenu();
+
         JMenuBar menuBar = new JMenuBar();
-        JMenuItem menuItem = new JMenuItem("item1");
-        String a = "a";
-        menuItem.addActionListener(e -> {
-            TextForm textForm = new TextForm(a);
-            textForm.showForm();
-        });
-
-        JMenu menu = new JMenu("main menu");
-        menu.add(menuItem);
-        menu.setBorder(BorderFactory.createLineBorder(Color.RED,1));
-
         menuBar.add(menu);
 
         setJMenuBar(menuBar);
-
         return menuBar;
     }
 
     private JMenu genMainFuncMenu() {
         JMenu menu = new JMenu("Main Functions");
+        menu.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
         Map<String, IMainFunction> functionMap = FunctionFactory.getBeansMap();
         for (Map.Entry<String, IMainFunction> functionEntry : functionMap.entrySet()) {
-
+            IMainFunction function = functionEntry.getValue();
+            JMenuItem menuItem = new JMenuItem(functionEntry.getKey());
+            menuItem.addActionListener(e -> {
+                BaseForm form = function.getFunctionForm();
+                form.setTitle(functionEntry.getKey());
+                form.showModel();
+            });
+            menu.add(menuItem);
         }
-        JMenuItem menuItem = new JMenuItem("Text window");
         return menu;
     }
 
-    private void setFreeFormWhenClose(){
+    private void setFreeFormWhenClose() {
         addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {

@@ -13,11 +13,6 @@ public interface IMainFunction {
     void showFunctionForm();
 
     /**
-     * 菜单名称
-     */
-    void getMenuItemName();
-
-    /**
      * 获取具体功能的窗口
      *
      * @return 具体功能的窗口

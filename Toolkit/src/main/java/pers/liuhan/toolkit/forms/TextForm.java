@@ -26,13 +26,5 @@ public class TextForm extends BaseForm {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane);
-
-        setAlwaysOnTop(true);
-    }
-
-    @Override
-    public void showForm() {
-        setModal(true);
-        super.showForm();
     }
 }

@@ -15,12 +15,18 @@ public class BaseForm extends JDialog {
     public BaseForm() {
         setDefaultFrameSize();
         setFrameToScreenCenter();
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         setResizable(false);
     }
 
     public void showForm() {
         setVisible(true);
+    }
+
+    public void showModel(){
+        setModal(true);
+        setAlwaysOnTop(true);
+        showForm();
     }
 
     public void resetFormSize(int widthPercent, int heightPercent) {

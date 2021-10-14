@@ -8,7 +8,7 @@ import pers.liuhan.toolkit.interfaces.IMainFunction;
  * @author liuhan19691
  */
 
-@Service("0")
+@Service("TempTool")
 public class TempTool implements IMainFunction {
 
     @Override
@@ -17,13 +17,8 @@ public class TempTool implements IMainFunction {
     }
 
     @Override
-    public void getMenuItemName() {
-
-    }
-
-    @Override
     public BaseForm getFunctionForm() {
-        return null;
+        return new BaseForm();
     }
 
 }
