@@ -1,10 +1,9 @@
 package pers.liuhan.toolkit.component;
 
 
-import pers.liuhan.toolkit.forms.BaseForm;
+import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**

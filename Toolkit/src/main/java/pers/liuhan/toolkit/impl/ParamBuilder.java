@@ -2,7 +2,7 @@ package pers.liuhan.toolkit.impl;
 
 
 import org.springframework.stereotype.Component;
-import pers.liuhan.toolkit.forms.BaseForm;
+import pers.liuhan.toolkit.forms.base.BaseForm;
 import pers.liuhan.toolkit.forms.ParamBuilderForm;
 import pers.liuhan.toolkit.interfaces.IMainFunction;
 

@@ -1,6 +1,6 @@
 package pers.liuhan.toolkit.interfaces;
 
-import pers.liuhan.toolkit.forms.BaseForm;
+import pers.liuhan.toolkit.forms.base.BaseForm;
 
 /**
  * @author liuhan19691

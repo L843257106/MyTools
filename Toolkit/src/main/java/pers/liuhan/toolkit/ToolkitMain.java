@@ -1,7 +1,7 @@
 package pers.liuhan.toolkit;
 
 
-import pers.liuhan.toolkit.forms.MainForm;
+import pers.liuhan.toolkit.forms.base.MainForm;
 
 /**
  * @author liuhan19691

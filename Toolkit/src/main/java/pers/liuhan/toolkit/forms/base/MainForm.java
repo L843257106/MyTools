@@ -1,7 +1,8 @@
-package pers.liuhan.toolkit.forms;
+package pers.liuhan.toolkit.forms.base;
 
 
 import pers.liuhan.toolkit.factory.FunctionFactory;
+import pers.liuhan.toolkit.forms.base.BaseForm;
 import pers.liuhan.toolkit.interfaces.IMainFunction;
 
 import javax.swing.*;

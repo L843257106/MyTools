@@ -1,4 +1,4 @@
-package pers.liuhan.toolkit.forms;
+package pers.liuhan.toolkit.forms.base;
 
 
 import javax.swing.*;

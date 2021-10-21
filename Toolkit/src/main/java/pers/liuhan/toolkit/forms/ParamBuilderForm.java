@@ -4,6 +4,7 @@ package pers.liuhan.toolkit.forms;
 import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.InputTextForm;
 import pers.liuhan.toolkit.component.OutTextForm;
+import pers.liuhan.toolkit.forms.base.BaseForm;
 import pers.liuhan.toolkit.util.ComponentUtil;
 
 import javax.swing.*;
@@ -261,14 +262,13 @@ public class ParamBuilderForm extends BaseForm {
         sqlContext.append("--delete from tbparamelement where param_id = '").append(oldParam).append("' ");
         sqlContext.append("and belong_type = '").append(sysType).append("';").append(lineEnd);
 
-
         sqlContext.append("insert into tbparamelement(belong_type, ta_code, param_id, param_name, element_id, component_kind, group_id, group_name, order_no, data_default, prompt, split_str, visable, readonly_flag, line_flag, on_change) ").append(lineEnd);
         sqlContext.append("values ('").append(sysType).append("', '000000', '").append(newParam).append("', '").append(oldName).append("', '");
         sqlContext.append(itemsKeyCode).append("', '").append(compType).append("', ").append(groupId).append(", '");
         sqlContext.append(groupName).append("', ").append(order).append(", '").append(defaultValue).append("', '");
         sqlContext.append(oldName).append("', ' ', '").append(visible).append("', '").append(readOnly).append("', '0', ' ');").append(lineEnd);
 
-        sqlContext.append("").append(lineEnd);
+        sqlContext.append(lineEnd);
         sqlContext.append("--delete from tbparamelementdata where element_id = '").append(itemsKeyCode).append("';").append(lineEnd);
 
         int totalCount = sysItemCbx.getItemCount();
