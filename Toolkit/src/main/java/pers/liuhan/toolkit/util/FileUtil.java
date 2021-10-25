@@ -9,12 +9,16 @@ import java.nio.channels.FileChannel;
  */
 public class FileUtil {
 
+    public static void copyFile(String srcName, String tarName) {
+        copyFile(new File(srcName), new File(tarName));
+    }
+
     public static void copyFile(File src, File tar) {
         FileChannel srcChannel = null;
         FileChannel tarChannel = null;
 
         try {
-            if (src.isDirectory()) {
+            if (!src.isFile()) {
                 return;
             }
             if (tar.isDirectory()) {
@@ -23,6 +27,9 @@ public class FileUtil {
                 }
                 String tarName = tar.getAbsolutePath() + SystemUtil.getFileSeparator() + src.getName();
                 tar = new File(tarName);
+            }
+            if (tar.exists()) {
+                tar.delete();
             }
 
             srcChannel = new FileInputStream(src).getChannel();
@@ -48,15 +55,23 @@ public class FileUtil {
         }
     }
 
-    public static void createDir(String dir) {
-        File dirFile = new File(dir);
-        if (dirFile.exists()) {
-            if (!dirFile.isDirectory()) {
-                dirFile.mkdir();
-            }
-            return;
+    public static boolean createDir(String dir) {
+        return createDir(new File(dir));
+    }
+
+    public static boolean createDir(File tarFile) {
+        return tarFile.mkdir();
+    }
+
+    public static boolean deleteFile(String dir) {
+        return deleteFile(new File(dir));
+    }
+
+    public static boolean deleteFile(File file) {
+        if (!file.exists()) {
+            return true;
         }
-        dirFile.mkdir();
+        return file.delete();
     }
 
 }

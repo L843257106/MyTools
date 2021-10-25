@@ -5,7 +5,6 @@ import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.InputTextForm;
 import pers.liuhan.toolkit.component.OutTextForm;
 import pers.liuhan.toolkit.forms.base.BaseForm;
-import pers.liuhan.toolkit.util.ComponentUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,14 +63,10 @@ public class ParamBuilderForm extends BaseForm {
     private JButton resultBtn;
 
     private StringBuilder sqlContext;
-    private List<List<Component>> components;
-
 
     public ParamBuilderForm() {
         super();
-        components = new ArrayList<>();
         sqlContext = new StringBuilder();
-        genMainPanel();
         genOldParamInfo();
         genNewParamInfo();
         genVisiableInfo();
@@ -86,13 +81,7 @@ public class ParamBuilderForm extends BaseForm {
         genOrderInfo();
 
         genResultButton();
-        ComponentUtil.paintPanel(this, mainPnl, components);
-    }
-
-    private void genMainPanel() {
-        mainPnl = new JPanel();
-        mainPnl.setLayout(null);
-        add(mainPnl);
+        paintForm();
     }
 
     private void genOldParamInfo() {

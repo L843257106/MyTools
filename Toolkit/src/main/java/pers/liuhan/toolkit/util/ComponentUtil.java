@@ -1,5 +1,6 @@
 package pers.liuhan.toolkit.util;
 
+import pers.liuhan.toolkit.component.LScrollPane;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
@@ -24,23 +25,30 @@ public class ComponentUtil {
                 continue;
             }
             width = (form.getFactWidth() - COMP_BLANK * (line.size() + 1)) / line.size();
+            int height = DEFAULT_HEIGHT;
             for (Component comp : line) {
-                formatComponent(comp);
-                comp.setBounds(x, y, width, DEFAULT_HEIGHT);
+                height = formatComponent(comp);
+                comp.setBounds(x, y, width, height);
                 panel.add(comp);
-                x = x + width + COMP_BLANK;
+                x = x + comp.getWidth() + COMP_BLANK;
             }
             x = COMP_BLANK;
-            y = y + COMP_BLANK + DEFAULT_HEIGHT;
+            y = y + COMP_BLANK + height;
         }
     }
 
-    public static void formatComponent(Component component) {
+    public static int formatComponent(Component component) {
+        int height = DEFAULT_HEIGHT;
         if (component instanceof JTextField || component instanceof JTextArea) {
             component.setFont(new Font("黑体", Font.BOLD, 20));
         } else if (component instanceof JLabel) {
             ((JLabel) component).setHorizontalAlignment(SwingConstants.RIGHT);
             ((JLabel) component).setBorder(BorderFactory.createLineBorder(Color.black));
+        } else if (component instanceof LScrollPane) {
+            ((LScrollPane) component).setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            ((LScrollPane) component).setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            height = ((LScrollPane) component).getHeightUnit() * DEFAULT_HEIGHT;
         }
+        return height;
     }
 }

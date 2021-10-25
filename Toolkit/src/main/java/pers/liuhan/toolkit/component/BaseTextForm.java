@@ -4,6 +4,7 @@ package pers.liuhan.toolkit.component;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
@@ -40,7 +41,7 @@ public class BaseTextForm extends BaseForm {
 
     private void genScrollPane() {
         textArea = new JTextArea();
-       // textArea.setFont(new Font("黑体", Font.BOLD, 20));
+        //textArea.setFont(new Font("黑体", Font.BOLD, 15));
         scrollPane = new JScrollPane(textArea);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
