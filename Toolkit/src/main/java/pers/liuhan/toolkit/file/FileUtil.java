@@ -1,7 +1,7 @@
 package pers.liuhan.toolkit.file;
 
 
-import pers.liuhan.toolkit.constant.FileConstant;
+import pers.liuhan.toolkit.file.constant.FileConstant;
 import pers.liuhan.toolkit.util.SystemUtil;
 
 import java.io.*;

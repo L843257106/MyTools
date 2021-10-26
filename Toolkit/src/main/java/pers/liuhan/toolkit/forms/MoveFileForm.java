@@ -18,6 +18,8 @@ import java.util.concurrent.CountDownLatch;
  */
 public class MoveFileForm extends BaseForm {
 
+    private static final String SIC_TAR_SPLIT = "->";
+
     private JLabel savedLbl;
     private JComboBox<CbxItem> savedCbx;
 
@@ -67,7 +69,7 @@ public class MoveFileForm extends BaseForm {
     }
 
     private void paintSrcArea() {
-        srcLbl = new JLabel("[请列出源目录和目标目录，之间用'->'分隔，多个目录对应关系分多行列出]");
+        srcLbl = new JLabel("[请列出源目录和目标目录，之间用" + SIC_TAR_SPLIT + "分隔，多个目录对应关系分多行列出]");
         addComp(srcLbl);
         commitCurCompToPanel();
         srcDirs = new JTextArea();
@@ -88,7 +90,7 @@ public class MoveFileForm extends BaseForm {
                 String tarStr;
                 CountDownLatch downLatch = new CountDownLatch(text.length);
                 for (String fileMap : text) {
-                    line = fileMap.split("->");
+                    line = fileMap.split(SIC_TAR_SPLIT);
                     if (line.length != 2) {
                         downLatch.countDown();
                         continue;
