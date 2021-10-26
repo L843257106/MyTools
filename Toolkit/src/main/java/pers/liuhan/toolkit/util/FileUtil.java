@@ -1,6 +1,8 @@
 package pers.liuhan.toolkit.util;
 
 
+import pers.liuhan.toolkit.constant.FileConstant;
+
 import java.io.*;
 import java.nio.channels.FileChannel;
 
@@ -72,6 +74,21 @@ public class FileUtil {
             return true;
         }
         return file.delete();
+    }
+
+    public static String concatPath(String oldPath, String addPath) {
+        if (!oldPath.endsWith(FileConstant.FILE_SEPARATOR)) {
+            oldPath = oldPath + FileConstant.FILE_SEPARATOR;
+        }
+        return oldPath + addPath;
+    }
+
+    public static String getCurPath() {
+        return System.getProperty("user.dir");
+    }
+
+    public static String getPath(String fileName) {
+        return concatPath(getCurPath(), fileName);
     }
 
 }

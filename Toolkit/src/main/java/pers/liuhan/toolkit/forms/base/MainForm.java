@@ -1,12 +1,13 @@
 package pers.liuhan.toolkit.forms.base;
 
 
+import pers.liuhan.toolkit.constant.ResConstant;
 import pers.liuhan.toolkit.factory.FunctionFactory;
-import pers.liuhan.toolkit.forms.base.BaseForm;
 import pers.liuhan.toolkit.interfaces.IMainFunction;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.Map;
 
 /**

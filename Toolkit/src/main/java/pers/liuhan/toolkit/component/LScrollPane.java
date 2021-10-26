@@ -6,6 +6,7 @@ import java.awt.*;
 
 /**
  *
+ * @author liuhan19691
  */
 public class LScrollPane extends JScrollPane {
 

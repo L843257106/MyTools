@@ -5,6 +5,8 @@ import pers.liuhan.toolkit.component.LScrollPane;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author liuhan19691
@@ -27,8 +29,11 @@ public class MoveFileForm extends BaseForm {
 
     private JButton beginBtn;
 
+    Map<String, String> schemeMap;
+
     public MoveFileForm() {
         super();
+        schemeMap = new HashMap<>();
         paintSaveInfo();
         paintSaveBtn();
         paintSrcArea();
