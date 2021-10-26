@@ -2,11 +2,16 @@ package pers.liuhan.toolkit.forms;
 
 import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.LScrollPane;
+import pers.liuhan.toolkit.concurrent.task.MoveFileTask;
+import pers.liuhan.toolkit.file.FileUtil;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author liuhan19691
@@ -23,11 +28,8 @@ public class MoveFileForm extends BaseForm {
     private JTextArea srcDirs;
     private LScrollPane srcPane;
 
-    private JLabel tarLbl;
-    private JTextArea tarDirs;
-    private LScrollPane tarPane;
-
     private JButton beginBtn;
+    private JLabel statusLbl;
 
     Map<String, String> schemeMap;
 
@@ -37,8 +39,8 @@ public class MoveFileForm extends BaseForm {
         paintSaveInfo();
         paintSaveBtn();
         paintSrcArea();
-        paintTarArea();
         paintBegin();
+        paintStatusLabel();
 
         paintForm();
     }
@@ -65,28 +67,56 @@ public class MoveFileForm extends BaseForm {
     }
 
     private void paintSrcArea() {
-        srcLbl = new JLabel("[请列出源目录，多个目录分多行列出]");
+        srcLbl = new JLabel("[请列出源目录和目标目录，之间用'->'分隔，多个目录对应关系分多行列出]");
         addComp(srcLbl);
         commitCurCompToPanel();
         srcDirs = new JTextArea();
         srcPane = new LScrollPane(srcDirs, LScrollPane.DEFAULT_HEIGHT_UNIT);
+        srcPane.setHeightUnit(12);
         addComp(srcPane);
-        commitCurCompToPanel();
-    }
-
-    private void paintTarArea() {
-        tarLbl = new JLabel("[请列出目标目录，多个目录分多行列出]");
-        addComp(tarLbl);
-        commitCurCompToPanel();
-        tarDirs = new JTextArea();
-        tarPane = new LScrollPane(tarDirs, LScrollPane.DEFAULT_HEIGHT_UNIT);
-        addComp(tarPane);
         commitCurCompToPanel();
     }
 
     private void paintBegin() {
         beginBtn = new JButton("[开始移动目录]");
+        beginBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] text = srcDirs.getText().split("\n");
+                String[] line;
+                String srcStr;
+                String tarStr;
+                CountDownLatch downLatch = new CountDownLatch(text.length);
+                for (String fileMap : text) {
+                    line = fileMap.split("->");
+                    if (line.length != 2) {
+                        downLatch.countDown();
+                        continue;
+                    }
+                    srcStr = line[0];
+                    tarStr = line[1];
+                    FileUtil.clearDir(tarStr);
+                    FileUtil.createDir(tarStr);
+                    MoveFileTask task = new MoveFileTask(srcStr, tarStr);
+                    task.setDownLatch(downLatch);
+                    new Thread(task).start();
+                }
+                try {
+                    statusLbl.setText("[复制文件中......]");
+                    downLatch.await();
+                    statusLbl.setText("[复制文件完成.]");
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         addComp(beginBtn);
+        commitCurCompToPanel();
+    }
+
+    private void paintStatusLabel() {
+        statusLbl = new JLabel("[等待输入文件路径...]");
+        addComp(statusLbl);
         commitCurCompToPanel();
     }
 

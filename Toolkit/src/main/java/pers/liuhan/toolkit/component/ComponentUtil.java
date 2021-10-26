@@ -1,4 +1,4 @@
-package pers.liuhan.toolkit.util;
+package pers.liuhan.toolkit.component;
 
 import pers.liuhan.toolkit.component.LScrollPane;
 import pers.liuhan.toolkit.forms.base.BaseForm;

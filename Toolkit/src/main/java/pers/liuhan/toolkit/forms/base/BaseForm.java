@@ -1,7 +1,7 @@
 package pers.liuhan.toolkit.forms.base;
 
 
-import pers.liuhan.toolkit.util.ComponentUtil;
+import pers.liuhan.toolkit.component.ComponentUtil;
 
 import javax.swing.*;
 import java.awt.*;

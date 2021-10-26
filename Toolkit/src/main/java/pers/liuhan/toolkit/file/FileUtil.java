@@ -1,10 +1,13 @@
-package pers.liuhan.toolkit.util;
+package pers.liuhan.toolkit.file;
 
 
 import pers.liuhan.toolkit.constant.FileConstant;
+import pers.liuhan.toolkit.util.SystemUtil;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * @author liuhan19691
@@ -74,6 +77,41 @@ public class FileUtil {
             return true;
         }
         return file.delete();
+    }
+
+    public static void clearDir(File dir) {
+        if (!dir.exists()) {
+            return;
+        }
+        if (!dir.isDirectory()) {
+            return;
+        }
+        Deque<File> leftFile = new LinkedList<>();
+        File tempDir;
+        File[] childDirs = dir.listFiles();
+        for (File f : childDirs) {
+            leftFile.push(f);
+        }
+        while (!leftFile.isEmpty()) {
+            tempDir = leftFile.pop();
+            if (tempDir.isDirectory()) {
+                childDirs = tempDir.listFiles();
+                if (childDirs.length > 0) {
+                    leftFile.push(tempDir);
+                    for (File child : childDirs) {
+                        leftFile.push(child);
+                    }
+                } else {
+                    tempDir.delete();
+                }
+            } else {
+                tempDir.delete();
+            }
+        }
+    }
+
+    public static void clearDir(String dir) {
+        clearDir(new File(dir));
     }
 
     public static String concatPath(String oldPath, String addPath) {
