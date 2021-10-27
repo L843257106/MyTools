@@ -1,6 +1,6 @@
 package pers.liuhan.toolkit.component;
 
-import pers.liuhan.toolkit.component.LScrollPane;
+import org.apache.commons.lang3.StringUtils;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
@@ -15,6 +15,8 @@ public class ComponentUtil {
     public static final int DEFAULT_HEIGHT = 25;
 
     public static final int COMP_BLANK = 10;
+
+    private static final String TEXT_AREA_END = "\n";
 
     public static void paintPanel(BaseForm form, JPanel panel, List<List<Component>> comps) {
         int x = COMP_BLANK;
@@ -40,7 +42,7 @@ public class ComponentUtil {
     public static int formatComponent(Component component) {
         int height = DEFAULT_HEIGHT;
         if (component instanceof JTextField || component instanceof JTextArea) {
-            component.setFont(new Font("黑体", Font.BOLD, 20));
+            component.setFont(new Font("黑体", Font.BOLD, 25));
         } else if (component instanceof JLabel) {
             ((JLabel) component).setHorizontalAlignment(SwingConstants.RIGHT);
             ((JLabel) component).setBorder(BorderFactory.createLineBorder(Color.black));
@@ -50,5 +52,18 @@ public class ComponentUtil {
             height = ((LScrollPane) component).getHeightUnit() * DEFAULT_HEIGHT;
         }
         return height;
+    }
+
+    public static String[] getTextAreaContents(JTextArea textArea) {
+        return textArea.getText().split(TEXT_AREA_END);
+    }
+
+    public static void fillCombobox(JComboBox<CbxItem> comboBox, String[] lines) {
+        for (String line : lines) {
+            if (StringUtils.isBlank(line)) {
+                continue;
+            }
+            comboBox.addItem(new CbxItem(line));
+        }
     }
 }

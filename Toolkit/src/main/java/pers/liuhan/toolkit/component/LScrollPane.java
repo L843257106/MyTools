@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *
  * @author liuhan19691
  */
 public class LScrollPane extends JScrollPane {
@@ -17,6 +16,10 @@ public class LScrollPane extends JScrollPane {
     public LScrollPane(Component view, int heightUnit) {
         super(view);
         this.heightUnit = heightUnit;
+    }
+
+    public LScrollPane(Component view) {
+        super(view);
     }
 
     public int getHeightUnit() {

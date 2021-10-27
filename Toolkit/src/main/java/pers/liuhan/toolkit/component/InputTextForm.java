@@ -1,7 +1,7 @@
 package pers.liuhan.toolkit.component;
 
-import javax.swing.*;
-import java.awt.*;
+import pers.liuhan.toolkit.interfaces.IInputTextHandler;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,25 +10,12 @@ import java.awt.event.ActionListener;
  */
 public class InputTextForm extends BaseTextForm {
 
-    private Component textBoot;
+    IInputTextHandler handler;
 
-    private int mode = 0;
-
-    public static final int FILL_CBX = 1;
-
-    public InputTextForm(int mode) {
-        super();
-        this.mode = mode;
-        setTitle("请输入");
-    }
-
-    public InputTextForm() {
+    public InputTextForm(IInputTextHandler handler) {
         super();
         setTitle("请输入");
-    }
-
-    public void setTextBoot(Component comp) {
-        this.textBoot = comp;
+        this.handler = handler;
     }
 
     @Override
@@ -36,21 +23,10 @@ public class InputTextForm extends BaseTextForm {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (mode == FILL_CBX) {
-                    fillCombos();
-                    setVisible(false);
-                }
+                handler.dealInputText(textArea);
+                setVisible(false);
             }
         };
     }
 
-    private void fillCombos() {
-        if (textBoot instanceof JComboBox) {
-            String[] lines = textArea.getText().split("\n");
-            ((JComboBox) textBoot).removeAllItems();
-            for (String item : lines) {
-                ((JComboBox) textBoot).addItem(new CbxItem(item));
-            }
-        }
-    }
 }

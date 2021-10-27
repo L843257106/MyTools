@@ -2,6 +2,7 @@ package pers.liuhan.toolkit.forms;
 
 
 import pers.liuhan.toolkit.component.CbxItem;
+import pers.liuhan.toolkit.component.ComponentUtil;
 import pers.liuhan.toolkit.component.InputTextForm;
 import pers.liuhan.toolkit.component.OutTextForm;
 import pers.liuhan.toolkit.forms.base.BaseForm;
@@ -165,9 +166,10 @@ public class ParamBuilderForm extends BaseForm {
                 CbxItem item = (CbxItem) e.getItem();
                 sysItemCbx.removeAllItems();
                 if ("Z".equals(item.getKey())) {
-                    InputTextForm textForm = new InputTextForm(InputTextForm.FILL_CBX);
-                    textForm.setTextBoot(sysItemCbx);
-                    textForm.showModel();
+                    new InputTextForm(textArea -> {
+                        String[] lines = ComponentUtil.getTextAreaContents(textArea);
+                        ComponentUtil.fillCombobox(sysItemCbx, lines);
+                    }).showModel();
                 } else {
                     List<String> items = Arrays.asList(item.getValue().split("/"));
                     for (String value : items) {

@@ -23,6 +23,12 @@ public class MoveFileTask implements Runnable {
         this.tarStr = tarStr;
     }
 
+    public MoveFileTask(String srcStr, String tarStr, CountDownLatch downLatch) {
+        this.srcStr = srcStr;
+        this.tarStr = tarStr;
+        this.downLatch = downLatch;
+    }
+
     public void setDownLatch(CountDownLatch downLatch) {
         this.downLatch = downLatch;
     }
