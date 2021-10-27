@@ -6,6 +6,7 @@ import pers.liuhan.toolkit.file.FileUtil;
 import java.io.File;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -54,6 +55,8 @@ public class MoveFileTask implements Runnable {
                 FileUtil.copyFile(tempFile, tarFile);
             }
         }
-        downLatch.countDown();
+        if (!Objects.isNull(downLatch)) {
+            downLatch.countDown();
+        }
     }
 }
