@@ -1,10 +1,11 @@
 package pers.liuhan.toolkit.forms;
 
 import pers.liuhan.toolkit.component.CbxItem;
-import pers.liuhan.toolkit.forms.view.OutTextForm;
 import pers.liuhan.toolkit.component.factory.ButtonFactory;
 import pers.liuhan.toolkit.component.factory.ComboBoxFactory;
 import pers.liuhan.toolkit.forms.base.BaseForm;
+import pers.liuhan.toolkit.forms.view.OutTextForm;
+import pers.liuhan.toolkit.manager.SysLog;
 import pers.liuhan.toolkit.util.BooleanUtil;
 import pers.liuhan.toolkit.util.NumberUtil;
 import pers.liuhan.toolkit.util.StringUtil;
@@ -98,6 +99,7 @@ public class ShardTableSelectSqlForm extends BaseForm {
     }
 
     private void genContext() {
+        SysLog.addLog("正在生成分库分表查询语句...");
         int dbNum = NumberUtil.getIntFromString(shardNumTf.getText());
         String dbPrefix = shardDbPrefixTf.getText();
         int tableNum = NumberUtil.getIntFromString(tableNumTf.getText());
@@ -129,6 +131,7 @@ public class ShardTableSelectSqlForm extends BaseForm {
             }
         }
         sqlContext.append(") a ").append(lineEnd);
+        SysLog.addLog("生成分库分表查询语句结束");
     }
 
 }

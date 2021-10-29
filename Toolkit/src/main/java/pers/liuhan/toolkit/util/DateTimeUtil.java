@@ -9,7 +9,7 @@ import java.util.Calendar;
  */
 public class DateTimeUtil {
 
-    private static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static String getCurrentDateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_FORMAT);

@@ -92,6 +92,7 @@ public class MoveFileForm extends BaseForm {
             MoveFileScheme scheme = schemeMap.get(selectItem.getKey());
             String[] dirsLines = ComponentUtil.getTextAreaContents(srcDirs);
             MapUtil.fillMapWithStringArray(scheme.getDirs(), dirsLines);
+            SysLog.addLog("更新文件复制方案[" + selectItem + "]成功.");
         });
         addComp(mdfBtn);
         delBtn = new JButton("[删除当前方案]");
@@ -107,6 +108,7 @@ public class MoveFileForm extends BaseForm {
             if (schemeCbx.getItemCount() > 0) {
                 schemeCbx.setSelectedIndex(0);
             }
+            SysLog.addLog("删除文件复制方案[" + selectItem + "]成功.");
         });
         addComp(delBtn);
         saveBtn = new JButton("[保存当前方案]");
@@ -129,6 +131,8 @@ public class MoveFileForm extends BaseForm {
                     schemeMap.put(scheme.getId(), scheme);
 
                     schemeCbx.addItem(item);
+                    schemeCbx.setSelectedIndex(schemeCbx.getItemCount() - 1);
+                    SysLog.addLog("生成文件复制方案[" + item + "]成功.");
                     break;
                 }
             }).showModel();
@@ -164,7 +168,7 @@ public class MoveFileForm extends BaseForm {
             String srcStr;
             String tarStr;
             CountDownLatch downLatch = new CountDownLatch(text.length);
-            SysLog.addLog("开始复制文件,共" + text.length + "个文件...");
+            SysLog.addLog("开始复制文件,共" + text.length + "个文件夹...");
             for (String fileMap : text) {
                 line = fileMap.split(Punctuation.ARROW);
                 if (line.length != 2) {
@@ -204,7 +208,9 @@ public class MoveFileForm extends BaseForm {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
+                SysLog.addLog("正在将文件复制方案保存到文件...");
                 MoveFileScheme.saveSchemeToXml(schemeMap);
+                SysLog.addLog("正在将文件复制方案保存到完成");
             }
         });
     }

@@ -82,6 +82,7 @@ public class MainForm extends BaseForm {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
+                SysLog.addLog("Bye~");
                 SysLog.close();
             }
         });

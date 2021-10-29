@@ -3,10 +3,11 @@ package pers.liuhan.toolkit.forms;
 
 import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.ComponentUtil;
-import pers.liuhan.toolkit.forms.view.InputTextForm;
-import pers.liuhan.toolkit.forms.view.OutTextForm;
 import pers.liuhan.toolkit.component.factory.ComboBoxFactory;
 import pers.liuhan.toolkit.forms.base.BaseForm;
+import pers.liuhan.toolkit.forms.view.InputTextForm;
+import pers.liuhan.toolkit.forms.view.OutTextForm;
+import pers.liuhan.toolkit.manager.SysLog;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
@@ -231,6 +232,7 @@ public class ParamBuilderForm extends BaseForm {
     }
 
     private void genSqlContext() {
+        SysLog.addLog("正在生成系统参数Sql.....");
         String lineEnd = "\n";
         sqlContext.setLength(0);
         String insertTbparamSql = "insert into tbparam (ta_code, param_id, param_name, param_value, value_name, belong_type, modi_flag, reserve1)";
@@ -279,5 +281,6 @@ public class ParamBuilderForm extends BaseForm {
             sqlContext.append("values ('").append(itemsKeyCode).append("', ").append(i).append(", '").append(item.getKey()).append("', '");
             sqlContext.append(item.getValue()).append("', ' ', '1', '0', ' ', 0);").append(lineEnd);
         }
+        SysLog.addLog("生成系统参数Sql完成");
     }
 }
