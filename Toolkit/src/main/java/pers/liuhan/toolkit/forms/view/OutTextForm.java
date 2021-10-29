@@ -1,5 +1,7 @@
-package pers.liuhan.toolkit.component;
+package pers.liuhan.toolkit.forms.view;
 
+
+import pers.liuhan.toolkit.forms.base.BaseTextForm;
 
 /**
  * @author liuhan19691

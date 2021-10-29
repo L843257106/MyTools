@@ -1,5 +1,6 @@
-package pers.liuhan.toolkit.component;
+package pers.liuhan.toolkit.forms.view;
 
+import pers.liuhan.toolkit.forms.base.BaseTextForm;
 import pers.liuhan.toolkit.interfaces.IInputTextHandler;
 
 import java.awt.event.ActionEvent;

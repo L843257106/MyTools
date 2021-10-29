@@ -4,7 +4,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.ComponentUtil;
-import pers.liuhan.toolkit.component.InputTextForm;
+import pers.liuhan.toolkit.forms.view.InputTextForm;
 import pers.liuhan.toolkit.component.LScrollPane;
 import pers.liuhan.toolkit.concurrent.factory.ThreadPoolFactory;
 import pers.liuhan.toolkit.concurrent.task.MoveFileTask;

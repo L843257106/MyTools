@@ -3,15 +3,13 @@ package pers.liuhan.toolkit.forms;
 
 import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.ComponentUtil;
-import pers.liuhan.toolkit.component.InputTextForm;
-import pers.liuhan.toolkit.component.OutTextForm;
+import pers.liuhan.toolkit.forms.view.InputTextForm;
+import pers.liuhan.toolkit.forms.view.OutTextForm;
 import pers.liuhan.toolkit.component.factory.ComboBoxFactory;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author liuhan19691

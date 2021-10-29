@@ -2,7 +2,7 @@ package pers.liuhan.toolkit.file;
 
 
 import pers.liuhan.toolkit.file.constant.FileConstant;
-import pers.liuhan.toolkit.util.SystemUtil;
+import pers.liuhan.toolkit.manager.SystemUtil;
 
 import java.io.*;
 import java.nio.channels.FileChannel;

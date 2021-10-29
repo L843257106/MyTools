@@ -1,4 +1,4 @@
-package pers.liuhan.toolkit.component;
+package pers.liuhan.toolkit.forms.base;
 
 
 import pers.liuhan.toolkit.forms.base.BaseForm;

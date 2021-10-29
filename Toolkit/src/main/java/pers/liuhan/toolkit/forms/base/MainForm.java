@@ -1,6 +1,7 @@
 package pers.liuhan.toolkit.forms.base;
 
 
+import pers.liuhan.toolkit.component.factory.ButtonFactory;
 import pers.liuhan.toolkit.factory.FunctionFactory;
 import pers.liuhan.toolkit.interfaces.IMainFunction;
 
@@ -13,21 +14,46 @@ import java.util.Map;
  */
 public class MainForm extends BaseForm {
 
+    JMenuBar menuBar;
+
+    private JTextArea logText;
+    private JPanel logPnl;
+    private JScrollPane logPane;
+
+    private JButton clearBtn;
+
     public MainForm() {
         super();
         setTitle("Marish`s Tool");
         setJMenuBar(genMenuBar());
+        paintPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private JMenuBar genMenuBar() {
         JMenu menu = genMainFuncMenu();
 
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
         menuBar.add(menu);
 
         setJMenuBar(menuBar);
         return menuBar;
+    }
+
+    private void paintPanel() {
+        logText = new JTextArea();
+        logPane = new JScrollPane(logText);
+        logPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        logPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+
+        clearBtn = ButtonFactory.getButton("清空日志");
+        clearBtn.setBounds(getFactWidth() / 3, getFactHeight() / 10 * 8, getFactWidth() / 3, getFactHeight() / 10);
+
+
+        logPane.setBounds(5, 0, getFactWidth() - 10, getFactHeight() / 10 * 7);
+        mainPnl.add(logPane);
+        mainPnl.add(clearBtn);
     }
 
     private JMenu genMainFuncMenu() {
