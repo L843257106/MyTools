@@ -4,9 +4,12 @@ package pers.liuhan.toolkit.forms.base;
 import pers.liuhan.toolkit.component.factory.ButtonFactory;
 import pers.liuhan.toolkit.factory.FunctionFactory;
 import pers.liuhan.toolkit.interfaces.IMainFunction;
+import pers.liuhan.toolkit.manager.SysLog;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Map;
 
 /**
@@ -16,8 +19,7 @@ public class MainForm extends BaseForm {
 
     JMenuBar menuBar;
 
-    private JTextArea logText;
-    private JPanel logPnl;
+    private JTextArea logScreen;
     private JScrollPane logPane;
 
     private JButton clearBtn;
@@ -28,6 +30,8 @@ public class MainForm extends BaseForm {
         setJMenuBar(genMenuBar());
         paintPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addFormEvent();
+        SysLog.init(logScreen);
     }
 
     private JMenuBar genMenuBar() {
@@ -41,8 +45,8 @@ public class MainForm extends BaseForm {
     }
 
     private void paintPanel() {
-        logText = new JTextArea();
-        logPane = new JScrollPane(logText);
+        logScreen = new JTextArea();
+        logPane = new JScrollPane(logScreen);
         logPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         logPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -71,5 +75,15 @@ public class MainForm extends BaseForm {
             menu.add(menuItem);
         }
         return menu;
+    }
+
+    private void addFormEvent() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                SysLog.close();
+            }
+        });
     }
 }

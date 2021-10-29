@@ -11,6 +11,14 @@ public class StringUtil {
         return " ";
     }
 
+    public static String getBlanks(int n) {
+        String blanks = "";
+        for (int i = 0; i < n; i++) {
+            blanks += " ";
+        }
+        return blanks;
+    }
+
     public static String getOnePoint() {
         return ".";
     }
