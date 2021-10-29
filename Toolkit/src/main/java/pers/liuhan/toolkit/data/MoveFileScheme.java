@@ -10,6 +10,7 @@ import org.dom4j.io.SAXReader;
 import pers.liuhan.toolkit.file.FileUtil;
 import pers.liuhan.toolkit.file.constant.ResConstant;
 import pers.liuhan.toolkit.file.util.XmlUtil;
+import pers.liuhan.toolkit.manager.SysLog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -76,7 +77,7 @@ public class MoveFileScheme {
                 schemeMap.put(fileScheme.getId(), fileScheme);
             }
         } catch (DocumentException e) {
-            e.printStackTrace();
+            SysLog.addLog("加载文件复制方案出错!", e);
         }
         return schemeMap;
     }
@@ -103,7 +104,7 @@ public class MoveFileScheme {
             File file = getSchemeFile();
             XmlUtil.writeXml(file, document);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            SysLog.addLog("保存文件复制方案出错!", e);
         }
     }
 

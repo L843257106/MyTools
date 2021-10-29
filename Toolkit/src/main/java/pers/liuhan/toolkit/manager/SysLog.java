@@ -41,8 +41,7 @@ public class SysLog {
             addMsgToScreen("初始化日志失败!");
             return;
         }
-
-        addMsgToScreen("初始化日志完毕!");
+        addLog("日志初始化成功.");
     }
 
     public static synchronized void addLog(String msg) {
@@ -61,9 +60,9 @@ public class SysLog {
 
     public static synchronized void resetLog() {
         try {
-            logFileWriter.write("");
+            logFileWriter.write(StringUtil.getNullString());
             logFileWriter.flush();
-            logScreen.setText("");
+            logScreen.setText(StringUtil.getNullString());
         } catch (IOException e) {
             addMsgToScreen("写日志失败!");
         }
@@ -104,7 +103,7 @@ public class SysLog {
 
     private static void addMsgToLogFile(String msg) throws IOException {
         logWriter.write(getLogText(msg));
-        logFileWriter.flush();
+        logWriter.flush();
     }
 
     private static String getLogText(String msg) {

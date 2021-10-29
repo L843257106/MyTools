@@ -4,6 +4,7 @@ package pers.liuhan.toolkit.file.util;
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import pers.liuhan.toolkit.manager.SysLog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,11 +16,11 @@ public class XmlUtil {
     private static final int INDENT_SIZE = 2;
 
     public static void writeXml(File file, Document doc) throws FileNotFoundException {
-        if(!file.exists()){
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                SysLog.addLog("创建xml失败!");
             }
         }
 
@@ -38,7 +39,7 @@ public class XmlUtil {
             writer = new XMLWriter(new FileOutputStream(file), format);
             writer.write(doc);
         } catch (IOException e) {
-            e.printStackTrace();
+            SysLog.addLog("保存xml失败!");
         }
     }
 

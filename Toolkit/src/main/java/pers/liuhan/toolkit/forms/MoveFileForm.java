@@ -4,7 +4,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.ComponentUtil;
-import pers.liuhan.toolkit.forms.view.InputTextForm;
 import pers.liuhan.toolkit.component.LScrollPane;
 import pers.liuhan.toolkit.concurrent.factory.ThreadPoolFactory;
 import pers.liuhan.toolkit.concurrent.task.MoveFileTask;
@@ -12,6 +11,8 @@ import pers.liuhan.toolkit.constant.Punctuation;
 import pers.liuhan.toolkit.data.MoveFileScheme;
 import pers.liuhan.toolkit.file.FileUtil;
 import pers.liuhan.toolkit.forms.base.BaseForm;
+import pers.liuhan.toolkit.forms.view.InputTextForm;
+import pers.liuhan.toolkit.manager.SysLog;
 import pers.liuhan.toolkit.util.MapUtil;
 
 import javax.swing.*;
@@ -163,6 +164,7 @@ public class MoveFileForm extends BaseForm {
             String srcStr;
             String tarStr;
             CountDownLatch downLatch = new CountDownLatch(text.length);
+            SysLog.addLog("开始复制文件,共" + text.length + "个文件...");
             for (String fileMap : text) {
                 line = fileMap.split(Punctuation.ARROW);
                 if (line.length != 2) {
@@ -175,16 +177,16 @@ public class MoveFileForm extends BaseForm {
                 FileUtil.createDir(tarStr);
                 MoveFileTask task = new MoveFileTask(srcStr, tarStr);
                 task.setDownLatch(downLatch);
-
                 ExecutorService executorService = ThreadPoolFactory.getFixedThreadPool();
                 executorService.execute(task);
             }
             try {
-                statusLbl.setText("[复制文件中......]");
+                SysLog.addLog("复制文件执行中...");
                 downLatch.await();
+                SysLog.addLog("复制文件完成.");
                 statusLbl.setText("[复制文件完成.]");
             } catch (InterruptedException e1) {
-                e1.printStackTrace();
+                SysLog.addLog("复制文件失败!");
             }
         });
         addComp(beginBtn);

@@ -53,7 +53,7 @@ public class MainForm extends BaseForm {
 
         clearBtn = ButtonFactory.getButton("清空日志");
         clearBtn.setBounds(getFactWidth() / 3, getFactHeight() / 10 * 8, getFactWidth() / 3, getFactHeight() / 10);
-
+        clearBtn.addActionListener(e -> SysLog.resetLog());
 
         logPane.setBounds(5, 0, getFactWidth() - 10, getFactHeight() / 10 * 7);
         mainPnl.add(logPane);

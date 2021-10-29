@@ -23,4 +23,8 @@ public class StringUtil {
         return ".";
     }
 
+    public static String getNullString() {
+        return "";
+    }
+
 }

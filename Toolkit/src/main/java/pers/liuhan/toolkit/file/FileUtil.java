@@ -2,6 +2,7 @@ package pers.liuhan.toolkit.file;
 
 
 import pers.liuhan.toolkit.file.constant.FileConstant;
+import pers.liuhan.toolkit.manager.SysLog;
 import pers.liuhan.toolkit.manager.SystemUtil;
 
 import java.io.*;
@@ -43,19 +44,19 @@ public class FileUtil {
             tarChannel.transferFrom(srcChannel, 0, srcChannel.size());
 
         } catch (FileNotFoundException e) {
-            System.out.println("File not fount.");
+            SysLog.addLog(src.getAbsolutePath() + "不存在!");
         } catch (IOException e) {
-            e.printStackTrace();
+            SysLog.addLog("复制文件出错!", e);
         } finally {
             try {
                 srcChannel.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                SysLog.addLog("关闭源通道失败!", e);
             }
             try {
                 tarChannel.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                SysLog.addLog("关闭目标通道失败!", e);
             }
         }
     }
