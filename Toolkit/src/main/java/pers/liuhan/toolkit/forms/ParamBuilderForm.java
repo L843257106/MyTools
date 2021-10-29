@@ -5,6 +5,7 @@ import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.ComponentUtil;
 import pers.liuhan.toolkit.component.InputTextForm;
 import pers.liuhan.toolkit.component.OutTextForm;
+import pers.liuhan.toolkit.component.factory.ComboBoxFactory;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
@@ -70,7 +71,7 @@ public class ParamBuilderForm extends BaseForm {
     protected void fillComponents() {
         genOldParamInfo();
         genNewParamInfo();
-        genVisiableInfo();
+        genVisibleInfo();
         genReadOnlyInfo();
         genCompTypeInfo();
         genGroupIdInfo();
@@ -106,12 +107,10 @@ public class ParamBuilderForm extends BaseForm {
         commitCurCompToPanel();
     }
 
-    private void genVisiableInfo() {
+    private void genVisibleInfo() {
         visiableLbl = new JLabel("参数是否可见:");
         addComp(visiableLbl);
-        visiableCbx = new JComboBox<>();
-        visiableCbx.addItem(new CbxItem("0", "否"));
-        visiableCbx.addItem(new CbxItem("1", "是"));
+        visiableCbx = ComboBoxFactory.getYesOrNoComboBox();
         addComp(visiableCbx);
         commitCurCompToPanel();
     }
@@ -120,9 +119,7 @@ public class ParamBuilderForm extends BaseForm {
         readOnlyLbl = new JLabel("参数是否只读:");
         addComp(readOnlyLbl);
 
-        readOnluCbx = new JComboBox<>();
-        readOnluCbx.addItem(new CbxItem("0", "否"));
-        readOnluCbx.addItem(new CbxItem("1", "是"));
+        readOnluCbx = ComboBoxFactory.getYesOrNoComboBox();
         addComp(readOnluCbx);
         commitCurCompToPanel();
     }
@@ -185,7 +182,7 @@ public class ParamBuilderForm extends BaseForm {
                         ComponentUtil.fillCombobox(sysItemCbx, lines);
                     }).showModel();
                 } else {
-                    List<String> items = Arrays.asList(item.getValue().split("/"));
+                    String[] items = item.getValue().split("/");
                     for (String value : items) {
                         CbxItem tmpItem = new CbxItem(value);
                         sysItemCbx.addItem(tmpItem);
