@@ -1,5 +1,6 @@
 package pers.liuhan.toolkit.forms;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.ComponentUtil;
@@ -7,15 +8,18 @@ import pers.liuhan.toolkit.component.InputTextForm;
 import pers.liuhan.toolkit.component.LScrollPane;
 import pers.liuhan.toolkit.concurrent.factory.ThreadPoolFactory;
 import pers.liuhan.toolkit.concurrent.task.MoveFileTask;
+import pers.liuhan.toolkit.constant.Punctuation;
 import pers.liuhan.toolkit.data.MoveFileScheme;
 import pers.liuhan.toolkit.file.FileUtil;
 import pers.liuhan.toolkit.forms.base.BaseForm;
+import pers.liuhan.toolkit.util.MapUtil;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
@@ -24,15 +28,10 @@ import java.util.concurrent.ExecutorService;
  */
 public class MoveFileForm extends BaseForm {
 
-    private static final String SIC_TAR_SPLIT = "->";
+    private JLabel schemeLbl;
+    private JComboBox<CbxItem> schemeCbx;
 
-    public static final String SCHEME_KEY = "saveScheme";
-
-    public static final String TEXT_AREA_KEY = "textAreaKey";
-
-    private JLabel savedLbl;
-    private JComboBox<CbxItem> savedCbx;
-
+    private JButton mdfBtn;
     private JButton delBtn;
     private JButton saveBtn;
 
@@ -43,32 +42,68 @@ public class MoveFileForm extends BaseForm {
     private JButton beginBtn;
     private JLabel statusLbl;
 
-    private List<MoveFileScheme> schemeList;
+    private Map<String, MoveFileScheme> schemeMap;
 
     public MoveFileForm() {
         super();
-        addFormEvent();
-        schemeList = new ArrayList<>();
         paintSaveInfo();
         paintSaveBtn();
         paintSrcArea();
         paintBegin();
         paintStatusLabel();
-
         paintForm();
+        addFormEvent();
+        initSavedCbx();
     }
 
     private void paintSaveInfo() {
-        savedLbl = new JLabel("保存的方案:");
-        addComp(savedLbl);
-        savedCbx = new JComboBox();
-        addComp(savedCbx);
+        schemeLbl = new JLabel("保存的方案:");
+        addComp(schemeLbl);
+        schemeCbx = new JComboBox();
+        schemeCbx.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                CbxItem item = (CbxItem) e.getItem();
+                MoveFileScheme scheme = schemeMap.get(item.getKey());
+                if (Objects.isNull(scheme)) {
+                    return;
+                }
+                if (Objects.isNull(srcDirs)) {
+                    return;
+                }
+                ComponentUtil.fillTextAreaByMap(srcDirs, scheme.getDirs());
+            }
+        });
+        addComp(schemeCbx);
         initSavedCbx();
         commitCurCompToPanel();
     }
 
     private void paintSaveBtn() {
+        mdfBtn = new JButton("[更新当前方案]");
+        mdfBtn.addActionListener(e -> {
+            if (schemeCbx.getItemCount() == 0 || MapUtils.isEmpty(schemeMap)) {
+                return;
+            }
+            CbxItem selectItem = (CbxItem) schemeCbx.getSelectedItem();
+            MoveFileScheme scheme = schemeMap.get(selectItem.getKey());
+            String[] dirsLines = ComponentUtil.getTextAreaContents(srcDirs);
+            MapUtil.fillMapWithStringArray(scheme.getDirs(), dirsLines);
+        });
+        addComp(mdfBtn);
         delBtn = new JButton("[删除当前方案]");
+        delBtn.addActionListener(e -> {
+            if (schemeCbx.getItemCount() == 0) {
+                return;
+            }
+            int idx = schemeCbx.getSelectedIndex();
+            CbxItem selectItem = (CbxItem) schemeCbx.getSelectedItem();
+            schemeCbx.removeItemAt(idx);
+            schemeMap.remove(selectItem.getKey());
+            srcDirs.setText("");
+            if(schemeCbx.getItemCount() > 0){
+                schemeCbx.setSelectedIndex(0);
+            }
+        });
         addComp(delBtn);
         saveBtn = new JButton("[保存当前方案]");
         saveBtn.addActionListener(e -> {
@@ -79,7 +114,17 @@ public class MoveFileForm extends BaseForm {
                         continue;
                     }
                     // 输入多个时，取第一个
-                    savedCbx.addItem(new CbxItem(line));
+                    CbxItem item = new CbxItem(line);
+
+                    String[] dirsLines = ComponentUtil.getTextAreaContents(srcDirs);
+
+                    MoveFileScheme scheme = new MoveFileScheme();
+                    scheme.setId(item.getKey());
+                    scheme.setDesc(item.getValue());
+                    MapUtil.fillMapWithStringArray(scheme.getDirs(), dirsLines);
+                    schemeMap.put(scheme.getId(), scheme);
+
+                    schemeCbx.addItem(item);
                     break;
                 }
             }).showModel();
@@ -89,11 +134,15 @@ public class MoveFileForm extends BaseForm {
     }
 
     private void initSavedCbx() {
-        // todo
+        schemeMap = MoveFileScheme.loadSchemeFromXml();
+        schemeCbx.removeAllItems();
+        for (Map.Entry<String, MoveFileScheme> entry : schemeMap.entrySet()) {
+            schemeCbx.addItem(new CbxItem(entry.getKey(), entry.getValue().getDesc()));
+        }
     }
 
     private void paintSrcArea() {
-        srcLbl = new JLabel("[请列出源目录和目标目录，之间用" + SIC_TAR_SPLIT + "分隔，多个目录对应关系分多行列出]");
+        srcLbl = new JLabel("[请列出源目录和目标目录，之间用" + Punctuation.ARROW + "分隔，多个目录对应关系分多行列出]");
         addComp(srcLbl);
         commitCurCompToPanel();
         srcDirs = new JTextArea();
@@ -112,7 +161,7 @@ public class MoveFileForm extends BaseForm {
             String tarStr;
             CountDownLatch downLatch = new CountDownLatch(text.length);
             for (String fileMap : text) {
-                line = fileMap.split(SIC_TAR_SPLIT);
+                line = fileMap.split(Punctuation.ARROW);
                 if (line.length != 2) {
                     downLatch.countDown();
                     continue;
@@ -150,9 +199,7 @@ public class MoveFileForm extends BaseForm {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                List<MoveFileScheme> schemeList = new ArrayList<>();
-                schemeList.add(new MoveFileScheme());
-                MoveFileScheme.saveSchemeToXml(schemeList);
+                MoveFileScheme.saveSchemeToXml(schemeMap);
             }
         });
     }

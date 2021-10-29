@@ -1,11 +1,13 @@
 package pers.liuhan.toolkit.component;
 
 import org.apache.commons.lang3.StringUtils;
+import pers.liuhan.toolkit.constant.Punctuation;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liuhan19691
@@ -64,6 +66,16 @@ public class ComponentUtil {
                 continue;
             }
             comboBox.addItem(new CbxItem(line));
+        }
+    }
+
+    public static void fillTextAreaByMap(JTextArea textArea, Map<String, String> lines) {
+        textArea.setText("");
+        for (Map.Entry<String, String> entry : lines.entrySet()) {
+            textArea.append(entry.getKey());
+            textArea.append(Punctuation.ARROW);
+            textArea.append(entry.getValue());
+            textArea.append(Punctuation.LINE_END);
         }
     }
 }

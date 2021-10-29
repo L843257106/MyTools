@@ -18,7 +18,6 @@ import java.util.List;
  * @author liuhan19691
  */
 public class ParamBuilderForm extends BaseForm {
-    private JPanel mainPnl;
 
     private JLabel oldCodeLbl = new JLabel("老系统参数代码:");
     private JTextField oldCodeText = new JTextField();

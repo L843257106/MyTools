@@ -1,17 +1,18 @@
 package pers.liuhan.toolkit.data;
 
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import pers.liuhan.toolkit.file.FileUtil;
 import pers.liuhan.toolkit.file.constant.ResConstant;
 import pers.liuhan.toolkit.file.util.XmlUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,19 +54,42 @@ public class MoveFileScheme {
         this.dirs = dirs;
     }
 
-    public static List<MoveFileScheme> loadSchemeFromXml() {
-        List<MoveFileScheme> schemeList = new ArrayList<>();
-        return schemeList;
+    public static Map<String, MoveFileScheme> loadSchemeFromXml() {
+        Map<String, MoveFileScheme> schemeMap = new HashMap<>();
+        SAXReader saxReader = new SAXReader();
+        File file = getSchemeFile();
+        if (!file.exists()) {
+            return schemeMap;
+        }
+        try {
+            Document document = saxReader.read(file);
+            Element eleSchemes = document.getRootElement();
+            List<Element> eleSchemeList = eleSchemes.elements();
+            for (Element eleScheme : eleSchemeList) {
+                MoveFileScheme fileScheme = new MoveFileScheme();
+                fileScheme.setId(eleScheme.attributeValue("id"));
+                fileScheme.setDesc(eleScheme.attributeValue("desc"));
+                List<Element> eleDirLis = eleScheme.elements();
+                for (Element eleDir : eleDirLis) {
+                    fileScheme.getDirs().put(eleDir.attributeValue("src"), eleDir.attributeValue("tar"));
+                }
+                schemeMap.put(fileScheme.getId(), fileScheme);
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return schemeMap;
     }
 
-    public static void saveSchemeToXml(List<MoveFileScheme> schemeList) {
-        if (CollectionUtils.isEmpty(schemeList)) {
+    public static void saveSchemeToXml(Map<String, MoveFileScheme> schemeMap) {
+        if (MapUtils.isEmpty(schemeMap)) {
             return;
         }
         Document document = DocumentHelper.createDocument();
         Element schemesEle = document.addElement("Schemes");
-
-        for (MoveFileScheme scheme : schemeList) {
+        MoveFileScheme scheme;
+        for (Map.Entry<String, MoveFileScheme> node : schemeMap.entrySet()) {
+            scheme = node.getValue();
             Element schemeEle = schemesEle.addElement("Scheme");
             schemeEle.addAttribute("id", scheme.getId());
             schemeEle.addAttribute("desc", scheme.getDesc());
