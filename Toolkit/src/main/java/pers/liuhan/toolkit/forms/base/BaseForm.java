@@ -32,6 +32,7 @@ public class BaseForm extends JFrame {
         setResizable(false);
         curComps = new ArrayList<>();
         components = new ArrayList<>();
+        paintForm();
     }
 
     private void genMainPanel() {
@@ -40,7 +41,12 @@ public class BaseForm extends JFrame {
         add(mainPnl);
     }
 
+    protected void fillComponents(){
+
+    }
+
     protected void paintForm() {
+        this.fillComponents();
         ComponentUtil.paintPanel(this, mainPnl, components);
     }
 

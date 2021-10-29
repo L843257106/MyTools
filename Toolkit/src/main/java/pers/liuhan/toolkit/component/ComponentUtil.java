@@ -44,7 +44,7 @@ public class ComponentUtil {
     public static int formatComponent(Component component) {
         int height = DEFAULT_HEIGHT;
         if (component instanceof JTextField || component instanceof JTextArea) {
-            component.setFont(new Font("黑体", Font.BOLD, 25));
+            component.setFont(new Font("黑体", Font.BOLD, 20));
         } else if (component instanceof JLabel) {
             ((JLabel) component).setHorizontalAlignment(SwingConstants.RIGHT);
             ((JLabel) component).setBorder(BorderFactory.createLineBorder(Color.black));

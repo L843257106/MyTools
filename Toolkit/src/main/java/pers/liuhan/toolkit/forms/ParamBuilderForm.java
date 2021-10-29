@@ -8,9 +8,7 @@ import pers.liuhan.toolkit.component.OutTextForm;
 import pers.liuhan.toolkit.forms.base.BaseForm;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,46 +17,45 @@ import java.util.List;
  */
 public class ParamBuilderForm extends BaseForm {
 
-    private JLabel oldCodeLbl = new JLabel("老系统参数代码:");
-    private JTextField oldCodeText = new JTextField();
-    private JLabel oldNameLbl = new JLabel("老系统参数名称:", SwingConstants.RIGHT);
-    private JTextField oldNameText = new JTextField();
+    private JLabel oldCodeLbl;
+    private JTextField oldCodeText;
+    private JLabel oldNameLbl;
+    private JTextField oldNameText;
 
-    private JLabel newCodeLbl = new JLabel("新系统参数代码:");
+    private JLabel newCodeLbl;
     private JTextField newCodeText = new JTextField();
 
-    private JLabel visiableLbl = new JLabel("参数是否可见:");
-    private JComboBox<CbxItem> visiableCbx = new JComboBox<>();
+    private JLabel visiableLbl;
+    private JComboBox<CbxItem> visiableCbx;
 
-    private JLabel readOnlyLbl = new JLabel("参数是否只读:");
-    private JComboBox<CbxItem> readOnluCbx = new JComboBox<>();
+    private JLabel readOnlyLbl;
+    private JComboBox<CbxItem> readOnluCbx;
 
-    private JLabel compTypeLbl = new JLabel("组件类型:");
-    private JComboBox<CbxItem> compTypeCbx = new JComboBox<>();
+    private JLabel compTypeLbl;
+    private JComboBox<CbxItem> compTypeCbx;
 
-    private JLabel groupIdLbl = new JLabel("系统参数所属组代码:");
-    private JTextField groupIdText = new JTextField();
+    private JLabel groupIdLbl;
+    private JTextField groupIdText;
 
-    private JLabel groupNameLbl = new JLabel("系统参数所属组名称:");
-    private JTextField groupNameText = new JTextField();
+    private JLabel groupNameLbl;
+    private JTextField groupNameText;
 
-    private JLabel sysTypeLbl = new JLabel("系统类型:");
-    private JComboBox<CbxItem> sysTypeCbx = new JComboBox<>();
+    private JLabel sysTypeLbl;
+    private JComboBox<CbxItem> sysTypeCbx;
 
-    private JLabel dictItemsLbl = new JLabel("数据字典类型:");
-    private JComboBox<CbxItem> dictItemCbx = new JComboBox<>();
+    private JLabel dictItemsLbl;
+    private JComboBox<CbxItem> dictItemCbx;
+    private JLabel sysItemsLbl;
+    private JComboBox<CbxItem> sysItemCbx;
 
-    private JLabel sysItemsLbl = new JLabel("系统参数项:");
-    private JComboBox<CbxItem> sysItemCbx = new JComboBox<>();
+    private JLabel sysValueLbl;
+    private JTextField sysValueText;
 
-    private JLabel sysValueLbl = new JLabel("参数值:");
-    private JTextField sysValueText = new JTextField();
+    private JLabel defaultSysValueLbl;
+    private JTextField defaultSysValueText;
 
-    private JLabel defaultSysValueLbl = new JLabel("参数默认值:");
-    private JTextField defaultSysValueText = new JTextField();
-
-    private JLabel orderLbl = new JLabel("排序值:");
-    private JTextField orderText = new JTextField();
+    private JLabel orderLbl;
+    private JTextField orderText;
 
     private JButton resultBtn;
 
@@ -67,6 +64,10 @@ public class ParamBuilderForm extends BaseForm {
     public ParamBuilderForm() {
         super();
         sqlContext = new StringBuilder();
+    }
+
+    @Override
+    protected void fillComponents() {
         genOldParamInfo();
         genNewParamInfo();
         genVisiableInfo();
@@ -81,85 +82,99 @@ public class ParamBuilderForm extends BaseForm {
         genOrderInfo();
 
         genResultButton();
-        paintForm();
     }
 
     private void genOldParamInfo() {
-        List<Component> comps = new ArrayList<>();
-        comps.add(oldCodeLbl);
-        comps.add(oldCodeText);
-        components.add(comps);
+        oldCodeLbl = new JLabel("老系统参数代码:");
+        addComp(oldCodeLbl);
+        oldCodeText = new JTextField();
+        addComp(oldCodeText);
+        commitCurCompToPanel();
 
-        comps = new ArrayList<>();
-        comps.add(oldNameLbl);
-        comps.add(oldNameText);
-        components.add(comps);
+        oldNameLbl = new JLabel("老系统参数名称:");
+        addComp(oldNameLbl);
+        oldNameText = new JTextField();
+        addComp(oldNameText);
+        commitCurCompToPanel();
     }
 
     private void genNewParamInfo() {
-        List<Component> comps = new ArrayList<>();
-        comps.add(newCodeLbl);
-        comps.add(newCodeText);
-        components.add(comps);
+        newCodeLbl = new JLabel("新系统参数代码:");
+        addComp(newCodeLbl);
+        newCodeText = new JTextField();
+        addComp(newCodeText);
+        commitCurCompToPanel();
     }
 
     private void genVisiableInfo() {
+        visiableLbl = new JLabel("参数是否可见:");
+        addComp(visiableLbl);
+        visiableCbx = new JComboBox<>();
         visiableCbx.addItem(new CbxItem("0", "否"));
         visiableCbx.addItem(new CbxItem("1", "是"));
-        List<Component> comps = new ArrayList<>();
-        comps.add(visiableLbl);
-        comps.add(visiableCbx);
-        components.add(comps);
+        addComp(visiableCbx);
+        commitCurCompToPanel();
     }
 
     private void genReadOnlyInfo() {
+        readOnlyLbl = new JLabel("参数是否只读:");
+        addComp(readOnlyLbl);
+
+        readOnluCbx = new JComboBox<>();
         readOnluCbx.addItem(new CbxItem("0", "否"));
         readOnluCbx.addItem(new CbxItem("1", "是"));
-        List<Component> comps = new ArrayList<>();
-        comps.add(readOnlyLbl);
-        comps.add(readOnluCbx);
-        components.add(comps);
+        addComp(readOnluCbx);
+        commitCurCompToPanel();
     }
 
     private void genCompTypeInfo() {
+        compTypeLbl = new JLabel("组件类型:");
+        addComp(compTypeLbl);
+
+        compTypeCbx = new JComboBox<>();
         compTypeCbx.addItem(new CbxItem("1", "文本输入框"));
         compTypeCbx.addItem(new CbxItem("Y", "ratio按钮"));
         compTypeCbx.addItem(new CbxItem("A", "下拉框"));
-        List<Component> comps = new ArrayList<>();
-        comps.add(compTypeLbl);
-        comps.add(compTypeCbx);
-        components.add(comps);
+        addComp(compTypeCbx);
+        commitCurCompToPanel();
     }
 
     private void genGroupIdInfo() {
-        List<Component> comps = new ArrayList<>();
-        comps.add(groupIdLbl);
-        comps.add(groupIdText);
-        components.add(comps);
+        groupIdLbl = new JLabel("系统参数所属组代码:");
+        addComp(groupIdLbl);
+        groupIdText = new JTextField();
+        addComp(groupIdText);
+        commitCurCompToPanel();
     }
 
     private void genGroupNameInfo() {
-        List<Component> comps = new ArrayList<>();
-        comps.add(groupNameLbl);
-        comps.add(groupNameText);
-        components.add(comps);
+        groupNameLbl = new JLabel("系统参数所属组名称:");
+        addComp(groupNameLbl);
+        groupNameText = new JTextField();
+        addComp(groupNameText);
+        commitCurCompToPanel();
     }
 
     private void genSysTypeInfo() {
+        sysTypeLbl = new JLabel("系统类型:");
+        addComp(sysTypeLbl);
+
+        sysTypeCbx = new JComboBox<>();
         sysTypeCbx.addItem(new CbxItem("4", "ETF系统"));
         sysTypeCbx.addItem(new CbxItem("6", "分TA系统"));
-
-        List<Component> comps = new ArrayList<>();
-        comps.add(sysTypeLbl);
-        comps.add(sysTypeCbx);
-        components.add(comps);
+        addComp(sysTypeCbx);
+        commitCurCompToPanel();
     }
 
     private void genDictItemsInfo() {
+
+
+        dictItemsLbl = new JLabel("数据字典类型:");
+        addComp(dictItemsLbl);
+        dictItemCbx = new JComboBox<>();
         dictItemCbx.addItem(new CbxItem("0", "0:否/1:是"));
         dictItemCbx.addItem(new CbxItem("1", "0:不开通/1:开通"));
         dictItemCbx.addItem(new CbxItem("Z", "自定义"));
-
         dictItemCbx.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 CbxItem item = (CbxItem) e.getItem();
@@ -178,34 +193,36 @@ public class ParamBuilderForm extends BaseForm {
                 }
             }
         });
-
-        List<Component> comps = new ArrayList<>();
-        comps.add(dictItemsLbl);
-        comps.add(dictItemCbx);
-        comps.add(sysItemsLbl);
-        comps.add(sysItemCbx);
-        components.add(comps);
-    }
-
-    private void genDefaultSysValueInfo() {
-        List<Component> comps = new ArrayList<>();
-        comps.add(defaultSysValueLbl);
-        comps.add(defaultSysValueText);
-        components.add(comps);
+        addComp(dictItemCbx);
+        sysItemsLbl = new JLabel("系统参数项:");
+        addComp(sysItemsLbl);
+        sysItemCbx = new JComboBox<>();
+        addComp(sysItemCbx);
+        commitCurCompToPanel();
     }
 
     private void genSysValueInfo() {
-        List<Component> comps = new ArrayList<>();
-        comps.add(sysValueLbl);
-        comps.add(sysValueText);
-        components.add(comps);
+        sysValueLbl = new JLabel("参数值:");
+        addComp(sysValueLbl);
+        sysValueText = new JTextField();
+        addComp(sysValueText);
+        commitCurCompToPanel();
+    }
+
+    private void genDefaultSysValueInfo() {
+        defaultSysValueLbl = new JLabel("参数默认值:");
+        addComp(defaultSysValueLbl);
+        defaultSysValueText = new JTextField();
+        addComp(defaultSysValueText);
+        commitCurCompToPanel();
     }
 
     private void genOrderInfo() {
-        List<Component> comps = new ArrayList<>();
-        comps.add(orderLbl);
-        comps.add(orderText);
-        components.add(comps);
+        orderLbl = new JLabel("排序值:");
+        addComp(orderLbl);
+        orderText = new JTextField();
+        addComp(orderText);
+        commitCurCompToPanel();
     }
 
     private void genResultButton() {
@@ -214,9 +231,8 @@ public class ParamBuilderForm extends BaseForm {
             genSqlContext();
             new OutTextForm(sqlContext.toString()).showModel();
         });
-        List<Component> comps = new ArrayList<>();
-        comps.add(resultBtn);
-        components.add(comps);
+        addComp(resultBtn);
+        commitCurCompToPanel();
     }
 
     private void genSqlContext() {

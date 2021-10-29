@@ -46,14 +46,17 @@ public class MoveFileForm extends BaseForm {
 
     public MoveFileForm() {
         super();
+        addFormEvent();
+        initSavedCbx();
+    }
+
+    @Override
+    protected void fillComponents() {
         paintSaveInfo();
         paintSaveBtn();
         paintSrcArea();
         paintBegin();
         paintStatusLabel();
-        paintForm();
-        addFormEvent();
-        initSavedCbx();
     }
 
     private void paintSaveInfo() {
@@ -100,7 +103,7 @@ public class MoveFileForm extends BaseForm {
             schemeCbx.removeItemAt(idx);
             schemeMap.remove(selectItem.getKey());
             srcDirs.setText("");
-            if(schemeCbx.getItemCount() > 0){
+            if (schemeCbx.getItemCount() > 0) {
                 schemeCbx.setSelectedIndex(0);
             }
         });
