@@ -41,6 +41,9 @@ public class BaseForm extends JFrame {
         add(mainPnl);
     }
 
+    /**
+     * 子类填充组件
+     */
     protected void fillComponents(){
 
     }
