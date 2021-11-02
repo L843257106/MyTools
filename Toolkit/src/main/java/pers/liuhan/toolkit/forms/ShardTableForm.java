@@ -1,5 +1,6 @@
 package pers.liuhan.toolkit.forms;
 
+import org.apache.commons.lang3.StringUtils;
 import pers.liuhan.toolkit.component.CbxItem;
 import pers.liuhan.toolkit.component.factory.ButtonFactory;
 import pers.liuhan.toolkit.component.factory.ComboBoxFactory;
@@ -11,11 +12,13 @@ import pers.liuhan.toolkit.util.NumberUtil;
 import pers.liuhan.toolkit.util.StringUtil;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author liuhan19691
  */
-public class ShardTableSelectSqlForm extends BaseForm {
+public class ShardTableForm extends BaseForm {
 
     private JLabel shardNumLbl;
     private JTextField shardNumTf;
@@ -34,10 +37,19 @@ public class ShardTableSelectSqlForm extends BaseForm {
 
     private JButton okBtn;
 
+    private JLabel fundAccLbl;
+    private JTextField fundAccTf;
+    private JButton fundAccBtn;
+
+    private JLabel dbIdxLbl;
+    private JTextField dbIdxTf;
+    private JLabel tableIdxLbl;
+    private JTextField tableIdxTf;
+
 
     private StringBuilder sqlContext;
 
-    public ShardTableSelectSqlForm() {
+    public ShardTableForm() {
         super();
         sqlContext = new StringBuilder();
     }
@@ -49,6 +61,8 @@ public class ShardTableSelectSqlForm extends BaseForm {
         paintTableNameInfo();
         paintTableNumInfo();
         paintOk();
+        paintFundAccInfo();
+        paintOwnTableInfo();
     }
 
     private void paintShardInfo() {
@@ -97,6 +111,70 @@ public class ShardTableSelectSqlForm extends BaseForm {
         });
         commitCurCompToPanel();
     }
+
+    private void paintFundAccInfo() {
+        fundAccLbl = new JLabel("基金账号:");
+        addComp(fundAccLbl);
+
+        fundAccTf = new JTextField();
+        addComp(fundAccTf);
+
+        fundAccBtn = ButtonFactory.getButton("计算分库分表号");
+        fundAccBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String assetAcc = fundAccTf.getText();
+                int len = StringUtils.length(assetAcc);
+                if (len < 8) {
+                    dbIdxTf.setText("基金账号小于8位，无法计算分库分表信息!");
+                    return;
+                }
+
+                int dbNum = NumberUtil.getIntFromString(shardNumTf.getText());
+                int tableNum = NumberUtil.getIntFromString(tableNumTf.getText());
+                String accHash = assetAcc.substring(len - 8);
+                int hash = 0;
+                len = accHash.length();
+                int accChar;
+                int charNum;
+                for (int i = 0; i < len; ++i) {
+                    accChar = accHash.charAt(i);
+                    charNum = 0;
+                    if (Character.isDigit(accChar)) {
+                        charNum = accChar - '0';
+                    } else if (Character.isUpperCase(accChar)) {
+                        charNum = (accChar - 'A') % 10;
+                    } else if (Character.isLowerCase(accChar)) {
+                        charNum = (accChar - 'a') % 10;
+                    }
+
+                    hash = hash * 10 + charNum;
+                }
+                hash = Math.abs(hash);
+
+                dbIdxTf.setText(String.valueOf((hash / dbNum) % tableNum + 1));
+                tableIdxTf.setText(String.valueOf((hash % dbNum) + 1));
+                SysLog.addLog("计算账号[" + assetAcc + "]的分库分表信息.");
+            }
+        });
+        addComp(fundAccBtn);
+        commitCurCompToPanel();
+    }
+
+    private void paintOwnTableInfo() {
+        dbIdxLbl = new JLabel("分库号:");
+        addComp(dbIdxLbl);
+        dbIdxTf = new JTextField();
+        addComp(dbIdxTf);
+
+        tableIdxLbl = new JLabel("分表号:");
+        addComp(tableIdxLbl);
+        tableIdxTf = new JTextField();
+        addComp(tableIdxTf);
+
+        commitCurCompToPanel();
+    }
+
 
     private void genContext() {
         SysLog.addLog("正在生成分库分表查询语句...");

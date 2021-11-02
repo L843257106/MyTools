@@ -99,6 +99,7 @@ public class SysLog {
 
     private static void addMsgToScreen(String msg) {
         logScreen.append(getLogText(msg));
+        System.out.println(getLogText(msg));
     }
 
     private static void addMsgToLogFile(String msg) throws IOException {

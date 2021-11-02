@@ -41,14 +41,12 @@ public class MoveFileForm extends BaseForm {
     private LScrollPane srcPane;
 
     private JButton beginBtn;
-    private JLabel statusLbl;
 
     private Map<String, MoveFileScheme> schemeMap;
 
     public MoveFileForm() {
         super();
         addFormEvent();
-        initSavedCbx();
     }
 
     @Override
@@ -57,7 +55,6 @@ public class MoveFileForm extends BaseForm {
         paintSaveBtn();
         paintSrcArea();
         paintBegin();
-        paintStatusLabel();
     }
 
     private void paintSaveInfo() {
@@ -142,11 +139,13 @@ public class MoveFileForm extends BaseForm {
     }
 
     private void initSavedCbx() {
+        SysLog.addLog("正在从文件中加载文件复制方案......");
         schemeMap = MoveFileScheme.loadSchemeFromXml();
         schemeCbx.removeAllItems();
         for (Map.Entry<String, MoveFileScheme> entry : schemeMap.entrySet()) {
             schemeCbx.addItem(new CbxItem(entry.getKey(), entry.getValue().getDesc()));
         }
+        SysLog.addLog("从文件中加载文件复制方案完成");
     }
 
     private void paintSrcArea() {
@@ -185,21 +184,15 @@ public class MoveFileForm extends BaseForm {
                 executorService.execute(task);
             }
             try {
-                SysLog.addLog("复制文件执行中...");
+                SysLog.addLog("复制文件执行中......");
                 downLatch.await();
                 SysLog.addLog("复制文件完成.");
-                statusLbl.setText("[复制文件完成.]");
+
             } catch (InterruptedException e1) {
                 SysLog.addLog("复制文件失败!");
             }
         });
         addComp(beginBtn);
-        commitCurCompToPanel();
-    }
-
-    private void paintStatusLabel() {
-        statusLbl = new JLabel("[等待输入文件路径...]");
-        addComp(statusLbl);
         commitCurCompToPanel();
     }
 
